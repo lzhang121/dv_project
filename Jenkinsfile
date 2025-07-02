@@ -3,6 +3,7 @@ pipeline {
         docker {
             image 'docker:20.10.16' // Jenkins agent 容器需要能运行 docker 命令
             args '-v /var/run/docker.sock:/var/run/docker.sock'
+            reuseNode true
         }
     }
 
