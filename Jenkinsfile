@@ -1,74 +1,55 @@
 pipeline {
     agent {
         docker {
-            //image 'node:18'
-            image 'docker'
+            image 'docker:20.10.16' // Jenkins agent 容器需要能运行 docker 命令
             args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('887ec198-353d-4c00-ade8-2b5d41c69ede') // Jenkins 中配置的凭证 ID
-        DOCKERHUB_USER = 'rayzhang11'
-        IMAGE_FRONTEND = "${DOCKERHUB_USER}/vfrontend"
-        IMAGE_BACKEND = "${DOCKERHUB_USER}/dbackend"
+        DOCKER_COMPOSE_VERSION = '1.29.2'  // 确保 docker-compose 可用
     }
 
     stages {
-        stage('Checkout') {
+        stage('Clone Source') {
             steps {
                 checkout scm
             }
         }
 
-        stage('Check Docker') {
+        stage('Install docker-compose') {
             steps {
-                sh 'docker version'
-                sh 'docker inspect -f . docker || true'
+                sh '''
+                apk add --no-cache curl
+                curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+                chmod +x /usr/local/bin/docker-compose
+                docker-compose version
+                '''
             }
         }
 
-        stage('Build Frontend') {
+        stage('Build and Start Services') {
             steps {
-                dir('vfrontend') {
-                    sh 'whereis npm'
-                    sh '/usr/bin/npm install'
-                    sh '/usr/bin/npm run build'
-                }
+                sh 'docker-compose up -d --build'
             }
         }
 
-        stage('Build Backend') {
+        stage('Run Backend Tests') {
             steps {
-                dir('dbackend') {
-                    sh 'pip install -r requirements.txt'
-                }
+                sh 'docker-compose exec -T dbackend python manage.py test'
             }
         }
 
-        stage('Build Docker Images') {
+        stage('Frontend Build') {
             steps {
-                script {
-                    sh 'docker build -t $IMAGE_FRONTEND ./vfrontend'
-                    sh 'docker build -t $IMAGE_BACKEND ./dbackend'
-                }
+                sh 'docker-compose exec -T vfrontend npm install'
+                sh 'docker-compose exec -T vfrontend npm run build'
             }
         }
 
-        stage('Push to Docker Hub') {
+        stage('Stop Containers') {
             steps {
-                script {
-                    sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_USER --password-stdin"
-                    sh 'docker push $IMAGE_FRONTEND'
-                    sh 'docker push $IMAGE_BACKEND'
-                }
-            }
-        }
-
-        stage('Deploy (Optional)') {
-            steps {
-                sh 'docker-compose down || true'
-                sh 'docker-compose up -d'
+                sh 'docker-compose down'
             }
         }
     }
@@ -76,6 +57,7 @@ pipeline {
     post {
         always {
             echo 'Pipeline finished.'
+            sh 'docker-compose down || true'
         }
     }
 }
