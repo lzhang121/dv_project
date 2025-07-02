@@ -55,9 +55,10 @@ pipeline {
         // }
     }
 
-    // post {
-    //     always {
-    //         echo 'Pipeline finished.'
-    //     }
-    // }
+    post {
+        always {
+            echo 'Pipeline finished.'
+            sh 'docker-compose down || true' // 确保容器在任何情况下都能停止
+        }
+    }
 }
