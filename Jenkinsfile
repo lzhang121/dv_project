@@ -24,7 +24,7 @@ pipeline {
         stage('Check Docker') {
             steps {
                 sh 'docker version'
-                sh 'docker inspect -f . docker:20.10.16-dind || true'
+                sh 'docker inspect -f . docker:20.10.16 || true'
             }
         }
 
