@@ -1,11 +1,11 @@
 pipeline {
-    agent any
-        // docker {
-        //     image 'docker:20.10.16' // Jenkins agent 容器需要能运行 docker 命令
-        //     args '-v /var/run/docker.sock:/var/run/docker.sock'
-        //     reuseNode true
-        // }
-
+    agent }
+        docker {
+            image 'docker:20.10.16' // Jenkins agent 容器需要能运行 docker 命令
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+            reuseNode true
+        }
+    }
 
     environment {
         DOCKER_COMPOSE_VERSION = 'v2.38.1'  // 确保 docker-compose 可用
