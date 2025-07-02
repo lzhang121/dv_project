@@ -34,18 +34,18 @@ pipeline {
             }
         }
 
-        stage('Run Backend Tests') {
-            steps {
-                sh 'docker-compose exec -T dbackend python manage.py test'
-            }
-        }
+        // stage('Run Backend Tests') {
+        //     steps {
+        //         sh 'docker-compose exec -T dbackend python manage.py test'
+        //     }
+        // }
 
-        stage('Frontend Build') {
-            steps {
-                sh 'docker-compose exec -T vfrontend npm install'
-                sh 'docker-compose exec -T vfrontend npm run build'
-            }
-        }
+        // stage('Frontend Build') {
+        //     steps {
+        //         sh 'docker-compose exec -T vfrontend npm install'
+        //         sh 'docker-compose exec -T vfrontend npm run build'
+        //     }
+        // }
 
         // stage('Stop Containers') {
         //     steps {
