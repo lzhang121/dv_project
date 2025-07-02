@@ -47,17 +47,16 @@ pipeline {
             }
         }
 
-        stage('Stop Containers') {
-            steps {
-                sh 'docker-compose down'
-            }
-        }
+        // stage('Stop Containers') {
+        //     steps {
+        //         sh 'docker-compose down'
+        //     }
+        // }
     }
 
     post {
         always {
             echo 'Pipeline finished.'
-            sh 'docker-compose down || true'
         }
     }
 }
