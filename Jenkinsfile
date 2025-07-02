@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'node:18'
-            image 'docker:20.10.16-dind'  // 或你自己构建的带 node+docker 的镜像
+            image 'docker:20.10.16'
             args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
