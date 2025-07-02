@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             //image 'node:18'
-            image 'docker:20.10.16'
+            image 'docker:20.10.24+dfsg1'
             args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
@@ -24,7 +24,7 @@ pipeline {
         stage('Check Docker') {
             steps {
                 sh 'docker version'
-                sh 'docker inspect -f . docker:20.10.16 || true'
+                sh 'docker inspect -f . docker:20.10.24+dfsg1 || true'
             }
         }
 
