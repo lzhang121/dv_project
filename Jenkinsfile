@@ -9,7 +9,7 @@ pipeline {
 
     environment {
         DOCKER_COMPOSE_VERSION = 'v2.38.1'  // 确保 docker-compose 可用
-        CUSTOM_TAG = "DV-PROJECT-${BUILD_NUMBER}"
+        currentBuild.displayName = "DV-PROJECT-${BUILD_NUMBER}"
     }
 
     stages {
