@@ -9,10 +9,18 @@ pipeline {
 
     environment {
         DOCKER_COMPOSE_VERSION = 'v2.38.1'  // 确保 docker-compose 可用
-        currentBuild.displayName = "DV-PROJECT-${BUILD_NUMBER}"
+
     }
 
     stages {
+        stage('Set Display Name') {
+            steps {
+                script {
+                    currentBuild.displayName = "DV-PROJECT-${env.BUILD_NUMBER}"
+                }
+            }
+        }
+
         stage('Clone Source') {
             steps {
                 checkout scm
