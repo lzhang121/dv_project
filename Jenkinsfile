@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+    tools {
+    nodejs 'Node 20'
+    }
     environment {
         DOCKERHUB_CREDENTIALS = credentials('887ec198-353d-4c00-ade8-2b5d41c69ede') // Jenkins 中配置的凭证 ID
         DOCKERHUB_USER = 'rayzhang11'
