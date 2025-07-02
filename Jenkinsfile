@@ -31,6 +31,7 @@ pipeline {
         stage('Build Frontend') {
             steps {
                 dir('vfrontend') {
+                    sh 'which npm || true'
                     sh '/usr/bin/npm install'
                     sh '/usr/bin/npm run build'
                 }
