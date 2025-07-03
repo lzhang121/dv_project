@@ -1,0 +1,1 @@
+/Users/zhanglei/apache-jmeter-5.6.2/bin/jmeter -n -t  TestPlan.jmx  -l results.jtl

@@ -1,9 +1,9 @@
 from rest_framework import viewsets, permissions, generics
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.authtoken.models import Token
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
+from rest_framework.authtoken.models import Token  # type: ignore
+from django.contrib.auth.models import User  # type: ignore
+from django.contrib.auth import authenticate  # type: ignore
 from .models import Blog, Comment
 from .serializers import BlogSerializer, CommentSerializer, UserSerializer
 
@@ -45,3 +45,10 @@ def login_view(request):
         return Response({'error': '用户名或密码错误'}, status=400)
     token, created = Token.objects.get_or_create(user=user)
     return Response({'token': token.key})
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])  # 可根据需要改成 IsAdminUser 等权限
+def get_all_users(request):
+    users = User.objects.all().values('id', 'username', 'date_joined')
+    return Response(list(users))

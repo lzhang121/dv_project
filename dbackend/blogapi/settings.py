@@ -1,4 +1,7 @@
 import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -13,15 +16,14 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # ✅ 放第一个
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',  # 必须
-    'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',  # ✅ 留一个就行
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',  # 必须
-    'django.contrib.messages.middleware.MessageMiddleware',  # 必须
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
 ]
 
 REST_FRAMEWORK = {
@@ -65,9 +67,20 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ALLOWED_HOSTS = ['*']
 ROOT_URLCONF = 'blogapi.urls'
 
-CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:8080",  # 如果你是用 React 本地开发
-    "http://127.0.0.1:5432",  # 或者其他端口
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://127.0.0.1:8082",  # 如果你是用 React 本地开发
+#     "http://127.0.0.1:5432",  # 或者其他端口
+# ]
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+DEBUG = True
+
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # 如果你有一个本地 static 目录
+]
+
+# 用于 collectstatic 收集到该目录（部署时用）
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'dev-secret-key')
