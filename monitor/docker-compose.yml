@@ -11,6 +11,8 @@ services:
       - INFLUXDB_HTTP_AUTH_ENABLED=false
 
   grafana:
+    environment:
+      - TZ=Asia/Shanghai
     image: grafana/grafana
     container_name: grafana
     ports:

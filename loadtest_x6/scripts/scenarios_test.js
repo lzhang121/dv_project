@@ -8,8 +8,8 @@ export let options = {
         login: {
             executor: 'constant-vus',
             exec: 'doRegister',
-            vus: 10,
-            duration: '30s',
+            vus: 100,
+            duration: '60s',
         },
         getData: {
             executor: 'ramping-vus',

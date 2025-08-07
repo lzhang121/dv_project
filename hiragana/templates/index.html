@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ルビ変換</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <h2>ふりがな表示ツール</h2>
+    <textarea id="inputText"></textarea><br>
+    <button onclick="convertText()">変換</button>
+
+    <h2>ルビ付き</h2>
+    <div id="result"></div>
+
+    <script>
+        async function convertText() {
+            const text = document.getElementById('inputText').value;
+            const res = await fetch('/convert', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text })
+            });
+            const data = await res.json();
+            document.getElementById('result').innerHTML = data.html;
+        }
+    </script>
+</body>
+
+</html>
